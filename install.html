@@ -1,0 +1,16 @@
+<html>
+  <body>
+    <p>Packaged app installation page</p>
+    <script>
+      // This URL must be a full url.
+      var manifestUrl = 'http://192.168.1.31/7e80/code/manifest.webapp';
+      var req = navigator.mozApps.install(manifestUrl);
+      req.onsuccess = function() {
+        alert(this.result.origin);
+      };
+      req.onerror = function() {
+        alert(this.error.name);
+      };
+    </script>
+  </body>
+</html>
