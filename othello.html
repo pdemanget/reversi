@@ -3,6 +3,8 @@
 chgt CSS
 change function gamevoer
 bug si mvt player1 impossible
+
+update: largeur pour FF: 480 (x800)
 -->
 <style>
 table{
@@ -15,33 +17,67 @@ td {
  border-width:1px;
  border-style:solid; 
  border-color:black;
+ width: 50px;
+ height: 50px;
+ background-color: #22DD22;
+}
+img {
+ width: 44px;
+ height: 44px;
+}
+.player1 {
+	width: 44px;
+	height: 44px;
+	border: 2px solid black;
+	border-radius: 22px;
+	background-color: black;
+}
+.player2 {
+	width: 44px;
+	height: 44px;
+	border: 2px solid black;
+	border-radius: 22px;
+	background-color: white;
 }
 .bordure{
 border:1px solid black
 }
 #message{
-border:1px solid black;
-text-align:center;
-width:160px;
-height: 100px;
-color: #5F9EA0;
-font: 200 10px monospace;
-overflow:auto;
+ border:1px solid black;
+ text-align:center;
+ width: 424px;
+ height: 50px;
+ color: #5F9EA0;
+ font: 200 10px monospace;
+ overflow:auto;
+ margin-top: 5px;
 }
 #gameover{
  border:1px solid black;
  position: absolute;
- top: 70px;
- left: 40px;
- width: 80px;
- height: 40px;
+ top: 200px;
+ left: 140px;
+ width: 140;
+ height: 60;
  text-align:center;
  vertical-align: middle; 
  background-color:#b0c4de;
  color: #FF0000;
  //font:bold 15px arial,sans-serif;
- font: 900 15px arial,sans-serif;
+ font: 900 23px arial,sans-serif;
  display:none;
+}
+.btn-bar{
+	text-align:center;
+	
+}
+.btn{
+	text-align:center;
+	background-color: #DDD;
+	border: 2px solid black;
+	border-radius:7px;
+	margin-left: 200px;
+	
 }
 </style>
 <script>
@@ -54,12 +90,14 @@ var round=0;
 var debug=false;
 
 //==technical
+//generation html
 function doTable(){
 var i,j;
 for(i=0;i<8;i++){
 document.write('<tr>');
 	for(j=0;j<8;j++){
-	document.write('<td><img src="othello/empty.png" onclick="doCell(this,'+i+','+j+')"/></td>');
+	//document.write('<td><img src="othello/empty.png" onclick="doCell(this,'+i+','+j+')"/></td>');
+	document.write('<td onclick="doCell(this,'+i+','+j+')"><div id="cell'+i+'_'+j+'" ></div> </td>');
 	}
 document.write('</tr>');
 }
@@ -95,11 +133,9 @@ if(nb>0){
 
 }
 
-var rsim=["empty.png","white.png","black.png"];
-
 function doPlaySwitchUI(player,i,j){
 //outprint("play"+player+i+j);
-document.images[i*8+j].src="othello/"+rsim[player];
+document.getElementById("cell"+i+"_"+j).className="player"+player;
 }
 
 function outprint(msg){
@@ -190,7 +226,7 @@ function stopGames(){
 	var bigmsg='';
 	if( score[1]>score[2]) bigmsg="You WIN";
 	else if( score[1]==score[2]) bigmsg="TIE";
-	else bigmsg="You LOOSE";
+	else bigmsg="You LOSE";
 	document.getElementById('gameover').innerHTML=bigmsg;
 	document.getElementById('gameover').style.display="table-cell";
 	
@@ -234,7 +270,7 @@ function playComputer(){
 doTable();</script>
 </table>
 <br/>
-<input type="button" onclick="window.location.reload()" value="restart"/>
+<div class="btnbar"> <input type="button" class="btn" onclick="window.location.reload()" value="restart"/> </div>
 <div id="message">
 </div>
 <div id="gameover"></div>
