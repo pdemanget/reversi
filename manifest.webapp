@@ -1,10 +1,10 @@
 {
   "name": "Othello",
   "description": "Othello game",
-  "launch_path": "/code/othello.html",
+  "launch_path": "/othello/othello.html",
   "icons": {
-    "512": "/code/othello/icon512.png",
-    "128": "/code/othello/black.png"
+    "512": "/othello/othello/icon512.png",
+    "128": "/othello/othello/black.png"
   },
   "developer": {
     "name": "Philippe Demanget",
