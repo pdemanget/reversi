@@ -1,14 +1,14 @@
 {
-  "name": "Othello",
-  "description": "Othello game",
-  "launch_path": "/othello/othello.html",
+  "name": "Reversi",
+  "description": "Reversi game",
+  "launch_path": "/reversi/index.html",
   "icons": {
-    "512": "/othello/othello/icon512.png",
-    "128": "/othello/othello/black.png"
+    "512": "/reversi/img/icon512.png",
+    "128": "/reversi/img/black.png"
   },
   "developer": {
     "name": "Philippe Demanget",
-    "url": "https://github.com/pdemanget/othello"
+    "url": "https://github.com/pdemanget/reversi"
   },
   "default_locale": "en"
 }
