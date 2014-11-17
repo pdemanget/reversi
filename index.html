@@ -142,10 +142,14 @@ if(nb>0){
 }
 
 }
-
+var delay=0;
 function doPlaySwitchUI(player,i,j){
-//outprint("play"+player+i+j);
-document.getElementById("cell"+i+"_"+j).className="player"+player;
+	//outprint("play"+player+i+j);
+	delay= delay+500;
+	setTimeout(function(){
+		document.getElementById("cell"+i+"_"+j).className="player"+player;
+		delay=0;
+	},delay);
 }
 
 function outprint(msg){
