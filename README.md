@@ -1,4 +1,6 @@
-othello
+Reversi
 =======
 
-Othello game in javascript for firefox OS
+Reversi/ othello game in javascript for firefox OS.
+
+

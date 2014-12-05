@@ -143,13 +143,15 @@ if(nb>0){
 
 }
 var delay=0;
-function doPlaySwitchUI(player,i,j){
+function doPlaySwitchUI(player,i,j,time){
 	//outprint("play"+player+i+j);
-	delay= delay+500;
+	//delay= delay?delay+speedDelay:(speedDelay);
+	delay= delay?delay+speedDelay:(speedDelay);
 	setTimeout(function(){
 		document.getElementById("cell"+i+"_"+j).className="player"+player;
 		delay=0;
-	},delay);
+		lastPlayDelay=1;
+	},time||delay);
 }
 
 function outprint(msg){
@@ -183,10 +185,14 @@ for(k=0;k<nb;k++){
 	doPlayAdd(player,i,j);
 }
 }
-function doPlayAdd(player,i,j){
+function doPlayAdd(player,i,j,time){
 oth[i][j]=player;
-doPlaySwitchUI(player,i,j);
+doPlaySwitchUI(player,i,j,time);
 }
+
+var lastPlayDelay=1;
+var speedDelay=100;
+var computerDelay=500;
 /*
 algorithm 
 loop in 8 direction till border, find other color, till ours, if none, return unplayable code ie 0.
@@ -198,7 +204,10 @@ for(i0=-1;i0<=1;i0++)
 for(j0=-1;j0<=1;j0++)
 	rslt+=doPlayDir(player,i,j,i0,j0,simu);
 if(simu) return rslt;
-if(rslt>0) doPlayAdd(player,i,j);
+if(rslt>0){
+ doPlayAdd(player,i,j,lastPlayDelay);
+// lastPlayDelay=delay;
+}
 return rslt;
 }
 
@@ -259,6 +268,8 @@ var myarray=[
 [8,0,6,4,4,6,0,8]
 ]
 function playComputer(){
+	delay=delay+computerDelay;
+	lastPlayDelay=delay;
 	outprintappend("playComputer"+gplayer);
 	//just play in priority the best notated cells.
 	for(k=8;k>=-1;k--)
