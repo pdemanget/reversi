@@ -2,8 +2,12 @@
   <body>
     <p>Packaged app installation page</p>
     <script>
-      // This URL must be a full url.
-      var manifestUrl = 'http://localhost/othello/manifest.webapp';
+      
+	  var url = window.location.href;
+	  url=url.substring(0,url.lastIndexOf('/'));
+
+	  // This URL must be a full url.
+      var manifestUrl = url+'/manifest.webapp';
       var req = navigator.mozApps.install(manifestUrl);
       req.onsuccess = function() {
         alert(this.result.origin);

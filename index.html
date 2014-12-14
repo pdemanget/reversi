@@ -11,86 +11,117 @@ change function gamevoer
 bug si mvt player1 impossible
 
 update: largeur pour FF: 480 (x800)
+
+passage en jsCss
 -->
-<style>
-html, body {
- width: 100%;
- height: 100%;
-}
-table{
- border-width:1px; 
- border-style:solid; 
- border-color:black;
- border-collapse:collapse
-}
-td { 
- border-width:1px;
- border-style:solid; 
- border-color:black;
- width: 50px;
- height: 50px;
- background-color: #22DD22;
-}
-img {
- width: 44px;
- height: 44px;
-}
-.player1 {
-	width: 44px;
-	height: 44px;
-	border: 2px solid black;
-	border-radius: 22px;
-	background-color: black;
-}
-.player2 {
-	width: 44px;
-	height: 44px;
-	border: 2px solid black;
-	border-radius: 22px;
-	background-color: white;
-}
-.bordure{
-border:1px solid black
-}
-#message{
- border:1px solid black;
- text-align:center;
- width: 424px;
- height: 50px;
- color: #5F9EA0;
- font: 200 10px monospace;
- overflow:auto;
- margin-top: 5px;
-}
-#gameover{
- border:1px solid black;
- position: absolute;
- top: 200px;
- left: 140px;
- width: 140;
- height: 60;
- text-align:center;
- vertical-align: middle; 
- background-color:#b0c4de;
- color: #FF0000;
- //font:bold 15px arial,sans-serif;
- font: 900 23px arial,sans-serif;
- display:none;
-}
-.btn-bar{
-	text-align:center;
-	
-}
-.btn{
-	text-align:center;
-	background-color: #DDD;
-	border: 2px solid black;
-	border-radius:7px;
-	margin-left: 200px;
-	
-}
-</style>
 <script>
+var baseSize=25;
+var style1={
+	"html, body": {
+	 width: "100%",
+	 height: "100%",
+	},
+	table: {
+	 border_width:1,
+	 border_style:"solid",
+	 border_color:"black",
+	 border_collapse:"collapse"
+	},
+
+	td: { 
+	 border_width:1,
+	 border_style:"solid",
+	 border_color:"black",
+	 width: baseSize+4,
+	 height: baseSize+4,
+	 background_color: 0x22DD22
+	},
+	img: {
+	 width: baseSize+"px",
+	 height: baseSize+"px"
+	},
+	".player1": {
+		width: baseSize+"px",
+		height: baseSize+"px",
+		border: "2px solid black",
+		border_radius: "22px",
+		background_color: "black"
+	},
+	".player2": {
+		width: baseSize+"px",
+		height: baseSize+"px",
+		border: "2px solid black",
+		"border-radius": "22px",
+		"background-color": "white"
+	},
+	"#message": {
+	 border:"1px solid black",
+	 text_align:"center",
+	 width: 8*(baseSize+5),
+	 height: 50,
+	 color: 0x5F9EA0,
+	 font: "200 10px monospace",
+	 overflow:"auto",
+	 margin_top: 5,
+	},
+	"#gameover": {
+	 border:"1px solid black",
+	 position: "absolute",
+	 top: 200,
+	 /*left: 140px,*/
+	  margin: "0 auto",
+	 width: 140,
+	 height: 60,
+	 text_align:"center",
+	 vertical_align: "middle", 
+	 background_color:0xb0dec4,
+	 color: 0xFF0000,
+	 //font:bold 15px arial,sans-serif,
+	 font: "900 30px arial,sans-serif",
+	 display:"none",
+	},
+	".btn_bar": {
+		text_align:"center",
+		
+	},
+	".btn": {
+		text_align:"center",
+		background_color: 0xDDD,
+		border: "2px solid black",
+		border_radius:7,
+		margin_left: 200,
+		
+	}
+} 
+/**
+ * Map<Map<<String>> elem: map of map of CSS strings
+ * syntax simplification: _ replaced by -
+ * number replaced by numberpx or #number
+ */
+function js2css(js){
+	monstyle=document.createElement('style');
+	document.head.appendChild(monstyle)
+	for (var k in js){
+	    css = k + '{'; 
+		for (var l in js[k]){
+			var prop=l.replace('_','-'); 
+			var value=js[k][l];
+			if (typeof value === 'number' ){
+				if(l.indexOf('color')>=0){
+					value ="#"+value.toString(16);
+				}else{
+					value +="px";
+				}
+			}
+			css += prop + ': ' + value +';';
+		}
+		css += '}';
+		monstyle.sheet.insertRule(css,0);
+		console.log(css);
+	}
+}
+js2css(style1);
+
 var gplayer=1;
 var oth;
 var gameover=false;
@@ -290,6 +321,7 @@ function playComputer(){
 
 </script>
 <body>
+<h1>Reversi</h1>
 <table>
 <script>
 doTable();</script>
