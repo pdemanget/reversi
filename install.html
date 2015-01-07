@@ -5,7 +5,7 @@
       
 	  var url = window.location.href;
 	  url=url.substring(0,url.lastIndexOf('/'));
-
+		document.write("this will install from :"+url);
 	  // This URL must be a full url.
       var manifestUrl = url+'/manifest.webapp';
       var req = navigator.mozApps.install(manifestUrl);

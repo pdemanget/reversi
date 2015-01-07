@@ -15,17 +15,32 @@ update: largeur pour FF: 480 (x800)
 passage en jsCss
 -->
 <script>
+//action of debug: more logs, change formatting
+// values 0: normal, 1 debug, 2 trace
+var debug=0;
 var baseSize=25;
+var lgreen=0x5F5;
 var style1={
 	"html, body": {
 	 width: "100%",
 	 height: "100%",
+	 margin: 0
+	},
+	h1:{
+	 background: "black",
+	 color: 0xFFFFFF,
+	 font_family: "arial,sans-serif",
+	 text_align: "center",
+	 margin: 0
 	},
 	table: {
+	 margin: 5,
 	 border_width:1,
 	 border_style:"solid",
 	 border_color:"black",
-	 border_collapse:"collapse"
+	 border_collapse:"collapse",
+	 margin_left:"auto", 
+     margin_right:"auto"
 	},
 
 	td: { 
@@ -57,40 +72,47 @@ var style1={
 	"#message": {
 	 border:"1px solid black",
 	 text_align:"center",
-	 width: 8*(baseSize+5),
-	 height: 50,
+	 width: 8*(baseSize+7),
+	 height: 75,
 	 color: 0x5F9EA0,
-	 font: "200 10px monospace",
+	 font: debug?"200 10px monospace":"bold 20px arial",
 	 overflow:"auto",
 	 margin_top: 5,
+	 margin_left: "auto",
+     margin_right: "auto"
 	},
 	"#gameover": {
-	 border:"1px solid black",
+	 //border:"1px solid black",
 	 position: "absolute",
-	 top: 200,
-	 /*left: 140px,*/
-	  margin: "0 auto",
-	 width: 140,
-	 height: 60,
-	 text_align:"center",
-	 vertical_align: "middle", 
-	 background_color:0xb0dec4,
-	 color: 0xFF0000,
-	 //font:bold 15px arial,sans-serif,
+	 top: 125,
+	 left: 0,
+	 right: 0,
+	 margin: "0 auto",
+     padding: 10,
+	 max_width: 130,
+	 background_color: "rgba(127,255,127,0.75)",
+	 //box_shadow: "0px 0px 25px #5F5",
+	 color: 0,
+	 text_align: "center",
 	 font: "900 30px arial,sans-serif",
-	 display:"none",
+	 display: "none",
 	},
-	".btn_bar": {
+	".btnbar": {
 		text_align:"center",
-		
+		background_color: "black",
+		position: "fixed",
+		left: 0,
+		right: 0,
+		bottom: 0
 	},
 	".btn": {
 		text_align:"center",
-		background_color: 0xDDD,
-		border: "2px solid black",
+		background_color: lgreen,
+		border: "2px solid #050",
 		border_radius:7,
-		margin_left: 200,
-		
+		margin: 5,
+		font: "bold 25px arial",
+		text_transform: "uppercase"
 	}
 } 
 /**
@@ -128,7 +150,13 @@ var gameover=false;
 var score=new Array(3);
 var computer=true;
 var round=0;
-var debug=false;
+var lang= "en";
+var i18n={
+	en:{
+		playerNames:['','Black','White']
+	}
+}
+
 
 //==technical
 //generation html
@@ -162,7 +190,9 @@ if(nb>0){
 		return 1;
 	}
  gplayer=3-gplayer;
- outprintappend("Round "+(round++) +". Got "+nb+" changes <br/>"+"Player "+gplayer+" please");
+ outprintappend("Round "+(round++) +". Got "+nb+" changes ", 2);
+ //outprintappend("Player "+gplayer+" please");
+ outprintappend(i18n[lang].playerNames[gplayer]+ " please");
  if((gplayer == 2)  && computer){
 	//outprintappend("before paycomputer"+i+j+player);
 	playComputer();
@@ -188,9 +218,12 @@ function doPlaySwitchUI(player,i,j,time){
 function outprint(msg){
 	document.getElementById('message').innerHTML=msg;
 }
-function outprintappend(msg){
+function outprintappend(msg,level){
+	if(level && level>debug) return;
     if(debug) msg += '<br/>' + document.getElementById('message').innerHTML;
-	document.getElementById('message').innerHTML =msg;
+	setTimeout(function(){
+		document.getElementById('message').innerHTML =msg;
+	},delay);
 }
 //==game API
 
@@ -276,7 +309,7 @@ function stopGames(){
 		score[oth[i][j]]++;
 	}
 	gameover=true;
-	outprint("The game is over. <br/>SCORE<br/> <b>player1:</b>"+score[1]+"<br/><b>player2:</b>"+score[2]);
+	outprint("The game is over. <br/> <b>Black:</b> "+score[1]+"<br/><b>White:</b> "+score[2]);
 	var bigmsg='';
 	if( score[1]>score[2]) bigmsg="You WIN";
 	else if( score[1]==score[2]) bigmsg="TIE";
@@ -301,7 +334,7 @@ var myarray=[
 function playComputer(){
 	delay=delay+computerDelay;
 	lastPlayDelay=delay;
-	outprintappend("playComputer"+gplayer);
+	outprintappend("play computer "+gplayer,2);
 	//just play in priority the best notated cells.
 	for(k=8;k>=-1;k--)
 	for(i=0;i<8;i++)
@@ -319,6 +352,15 @@ function playComputer(){
 	}
 }
 
+function restart(){
+	if(gameover || confirm("Current game wil be lost, are you sure?") ){
+		window.location.reload();	
+	}
+}
+
+function pageLoaded(){
+	outprintappend(i18n[lang].playerNames[gplayer]+ " please");
+}
 </script>
 <body>
 <h1>Reversi</h1>
@@ -326,9 +368,9 @@ function playComputer(){
 <script>
 doTable();</script>
 </table>
-<br/>
-<div class="btnbar"> <input type="button" class="btn" onclick="window.location.reload()" value="restart"/> </div>
-<div id="message">
-</div>
+<div id="message"></div>
+<div class="btnbar"> <input type="button" class="btn" onclick="restart()" value="restart"/> </div>
 <div id="gameover"></div>
+<script>
+pageLoaded();</script>
 </body></html>
