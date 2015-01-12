@@ -15,6 +15,16 @@ update: largeur pour FF: 480 (x800)
 passage en jsCss
 -->
 <script>
+var app={
+	params:{
+		player1:'Human', 
+		player2:'Computer'
+	},
+	game:{
+		started:false,
+		over: false
+	}
+};
 //action of debug: more logs, change formatting
 // values 0: normal, 1 debug, 2 trace
 var debug=0;
@@ -24,12 +34,12 @@ var style1={
 	"html, body": {
 	 width: "100%",
 	 height: "100%",
-	 margin: 0
+	 margin: 0,
+	 font: "bold 20px arial"
 	},
 	h1:{
 	 background: "black",
 	 color: 0xFFFFFF,
-	 font_family: "arial,sans-serif",
 	 text_align: "center",
 	 margin: 0
 	},
@@ -113,6 +123,27 @@ var style1={
 		margin: 5,
 		font: "bold 25px arial",
 		text_transform: "uppercase"
+	},
+	".window": {
+		position: "fixed",
+		top:0,
+		bottom:0,
+		left:0,
+		right:0,
+		background_color:0xFFFFFF
+	},
+	".centered": {
+		margin_left: "auto",
+		margin_right: "auto",
+		width: 300
+	},
+	label: {
+		width: 170,
+		display: "inline-block"
+	},
+	select: {
+		font: "bold 20px arial",
+		width: 120
 	}
 } 
 /**
@@ -122,7 +153,7 @@ var style1={
  */
 function js2css(js){
 	monstyle=document.createElement('style');
-	document.head.appendChild(monstyle)
+	document.head.appendChild(monstyle);
 	for (var k in js){
 	    css = k + '{'; 
 		for (var l in js[k]){
@@ -139,7 +170,7 @@ function js2css(js){
 		}
 		css += '}';
 		monstyle.sheet.insertRule(css,0);
-		console.log(css);
+		//console.log(css);
 	}
 }
 js2css(style1);
@@ -148,7 +179,7 @@ var gplayer=1;
 var oth;
 var gameover=false;
 var score=new Array(3);
-var computer=true;
+//deprecated var computer=true;
 var round=0;
 var lang= "en";
 var i18n={
@@ -178,6 +209,7 @@ function doCell(cell,i,j){
 }
 
 function doTestAndPlay(player,i,j){
+app.game.started=true;
 if(gameover) return;
 //outprintappend("click"+i+j+player+gplayer);
 var nb = doPlay(player,i,j,false);
@@ -191,11 +223,16 @@ if(nb>0){
 	}
  gplayer=3-gplayer;
  outprintappend("Round "+(round++) +". Got "+nb+" changes ", 2);
+ doNextPlayer();
+}
+
+function doNextPlayer(){
  //outprintappend("Player "+gplayer+" please");
  outprintappend(i18n[lang].playerNames[gplayer]+ " please");
- if((gplayer == 2)  && computer){
+ //if((gplayer == 2)  && computer){
+ if(app.params['player'+gplayer]=='Computer'){
 	//outprintappend("before paycomputer"+i+j+player);
-	playComputer();
+	playComputer(gplayer);
 	//outprintappend("after paycomputer"+i+j+player);
  }
 //REMOVE!
@@ -331,7 +368,7 @@ var myarray=[
 [0,0,4,4,4,4,0,0], 
 [8,0,6,4,4,6,0,8]
 ]
-function playComputer(){
+function playComputer(gplayer){
 	delay=delay+computerDelay;
 	lastPlayDelay=delay;
 	outprintappend("play computer "+gplayer,2);
@@ -340,9 +377,9 @@ function playComputer(){
 	for(i=0;i<8;i++)
 	for(j=0;j<8;j++){
 		if(myarray[i][j]>=k){
-			nb = doPlay(2,i,j,true);
+			nb = doPlay(gplayer,i,j,true);
 			if(nb>0){
-				nb = doTestAndPlay(2,i,j,true);
+				nb = doTestAndPlay(gplayer,i,j,true);
 				if(nb>0){
 				//bug see why it happens alert('KO');
 				}
@@ -353,14 +390,77 @@ function playComputer(){
 }
 
 function restart(){
+	if(!app.game.started){
+		doNextPlayer();
+	}
+
 	if(gameover || confirm("Current game wil be lost, are you sure?") ){
 		window.location.reload();	
 	}
 }
 
-function pageLoaded(){
-	outprintappend(i18n[lang].playerNames[gplayer]+ " please");
+var window0;
+
+function sfield(field, input){
+return '<div class="centered"><label>'+field+': </label>'+
+		'<select name="'+input+'"> <option>Human</option><option>Computer</option></select></div>';
 }
+function pushForm(o){
+	for(var key in o){
+		var elts = document.getElementsByName(key);
+		for(var i=0;i<elts.length;i++){
+			elts[i].value=o[key];
+		}
+	}
+}
+function pullForm(o){
+	for(var key in o){
+		var elts = document.getElementsByName(key);
+		for(var i=0;i<elts.length;i++){
+			o[key]=elts[i].value;
+		}
+	}
+}
+var params={player1:'', player2:''};
+function param(){
+	div=document.createElement('div');
+	div.setAttribute("class","window");
+	window0=document.body.appendChild(div);
+	//window0.innerHTML='<div style="position:absolute;top:0;bottom:0;left:0;right:0;" ><h1>test</h1></div>';
+	window0.innerHTML='<h1>Options</h1><br>'+sfield('Player 1 (Black)','player1')+'<br>'+
+		sfield('Player2 (White)','player2')+
+		'<div class="btnbar">'+
+		'	<input type="button" class="btn" onclick="cloze()" value="Cancel"/>'+
+		'	<input type="button" class="btn" onclick="cloze(true)" value="ok"/>'+
+		'</div>';
+	pushForm(app.params);
+}
+
+function cloze(save){
+	if(save){
+		pullForm(app.params);
+	}
+	window0.remove();
+}
+
+function pageLoaded(){
+	doHash();
+	app.addLink();
+}
+
+function doHash(){
+	if (window.location.hash=="#options"){
+		if( ! window0) param();
+	}
+}
+app.addLink= function(){
+	document.getElementsByName("restart")[0].addEventListener("click", restart);
+	document.getElementsByName("options")[0].addEventListener("click", param);
+}
+
+
+window.onhashchange=doHash;
+
 </script>
 <body>
 <h1>Reversi</h1>
@@ -369,7 +469,10 @@ function pageLoaded(){
 doTable();</script>
 </table>
 <div id="message"></div>
-<div class="btnbar"> <input type="button" class="btn" onclick="restart()" value="restart"/> </div>
+<div class="btnbar">
+	<input type="button" class="btn" name="restart" value="Start"/>
+	<input type="button" class="btn" name="options" value="Options"/>
+</div>
 <div id="gameover"></div>
 <script>
 pageLoaded();</script>
