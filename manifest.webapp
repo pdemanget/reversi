@@ -1,10 +1,10 @@
 {
   "name": "Reversi",
   "description": "Reversi game",
-  "launch_path": "/reversi/index.html",
+  "launch_path": "/index.html",
   "icons": {
-    "512": "/reversi/img/icon512.png",
-    "128": "/reversi/img/black.png"
+    "512": "/img/icon512.png",
+    "128": "/img/black.png"
   },
   "developer": {
     "name": "Philippe Demanget",

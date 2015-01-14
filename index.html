@@ -219,22 +219,28 @@ function doTestAndPlay(player,i,j){
 	//outprintappend("click"+i+j+player+gplayer);
 	var nb = doPlay(player,i,j,false);
 	if(nb>0){
-		var opponent = 3-gplayer;
-		if( isPlayable(opponent)){
-			gplayer=opponent;
-		} else {
-			if(! isPlayable(gplayer)){
-				stopGames();
-			}
-			return 1;
-		}
-		outprintappend("Round "+(round++) +". Got "+nb+" changes ", 2);
+		setOpponentPlayer();
+		outprintappend("Round "+(round++) +". Got "+nb+" changes ", 2);	
 		doNextPlayer();
 	}
 }
 
+function setOpponentPlayer(){
+	var opponent = 3-gplayer;
+	if( isPlayable(opponent)){
+		gplayer=opponent;
+	} else {
+		if(! isPlayable(gplayer)){
+			stopGames();
+			return 1;
+		}
+	}
+	
+}
+
 function doNextPlayer(){
- 	outprintappend(i18n[lang].playerNames[gplayer]+ " please");
+ 	if(gameover) return;
+	outprintappend(i18n[lang].playerNames[gplayer]+ " please");
 	if(app.params['player'+gplayer]=='Computer'){
 		playComputer(gplayer);
 	}
@@ -254,10 +260,11 @@ function doPlaySwitchUI(player,i,j,time){
 }
 
 function outprint(msg){
-	document.getElementById('message').innerHTML=msg;
+	outprintappend(msg,0);
 }
 function outprintappend(msg,level){
 	if(level && level>debug) return;
+	console.log(msg);
     if(debug) msg += '<br/>' + document.getElementById('message').innerHTML;
 	setTimeout(function(){
 		document.getElementById('message').innerHTML =msg;
@@ -355,14 +362,18 @@ function stopGames(){
 	}
 	else if (app.params.player1 == 'Human' && app.params.player2 != 'Human'){
 		if( score[1]>score[2]) bigmsg="You WIN";
+		else bigmsg="You LOSE";
 	}
 	else if (app.params.player2 == 'Human' && app.params.player1 != 'Human'){
 		if( score[2]>score[1]) bigmsg="You WIN";
+		else bigmsg="You LOSE";
 	} else if( score[1]>score[2]) bigmsg="Black WIN";
 	else bigmsg="White WIN"
 	
 	document.getElementById('gameover').innerHTML=bigmsg;
-	document.getElementById('gameover').style.display="table-cell";
+	setTimeout(function(){
+		document.getElementById('gameover').style.display="table-cell";
+	},delay);
 	
 }
 
@@ -387,7 +398,7 @@ function playComputer(gplayer){
 	for(i=0;i<8;i++)
 	for(j=0;j<8;j++){
 		if(myarray[i][j]>=k){
-			nb = doPlay(gplayer,i,j,true);
+			nb = doPlay(gplayer,i,j,true);//simu
 			if(nb>0){
 				nb = doTestAndPlay(gplayer,i,j,true);
 				if(nb>0){
@@ -397,6 +408,9 @@ function playComputer(gplayer){
 			}
 		}
 	}
+	
+	setOpponentPlayer();
+	doNextPlayer();
 }
 
 function restart(){
