@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html><head><title>reversi</title>
+<!-- TODO bug noscore when computer finishes 
+ store score 
+ click on options and css rule-->
 <!-- meta name="viewport" content="user-scalable = yes"-->
 <!--<meta name="viewport" content="width=480, initial-scale=0.7"> -->
 <!--<meta name="viewport" content="width=800">--> 
@@ -17,14 +20,16 @@ passage en jsCss
 <script>
 var app={
 	params:{
-		player1:'Human', 
-		player2:'Computer'
+		player1:localStorage.player1|| 'Human', 
+		player2:localStorage.player2|| 'Computer'
 	},
 	game:{
 		started:false,
 		over: false
 	}
 };
+
+
 //action of debug: more logs, change formatting
 // values 0: normal, 1 debug, 2 trace
 var debug=0;
@@ -209,37 +214,33 @@ function doCell(cell,i,j){
 }
 
 function doTestAndPlay(player,i,j){
-app.game.started=true;
-if(gameover) return;
-//outprintappend("click"+i+j+player+gplayer);
-var nb = doPlay(player,i,j,false);
-if(nb>0){
-	var opponent = 3-gplayer;
-	if(! isPlayable(opponent)){
-		if(! isPlayable(gplayer)){
-			stopGames();
+	app.game.started=true;
+	if(gameover) return;
+	//outprintappend("click"+i+j+player+gplayer);
+	var nb = doPlay(player,i,j,false);
+	if(nb>0){
+		var opponent = 3-gplayer;
+		if( isPlayable(opponent)){
+			gplayer=opponent;
+		} else {
+			if(! isPlayable(gplayer)){
+				stopGames();
+			}
+			return 1;
 		}
-		return 1;
+		outprintappend("Round "+(round++) +". Got "+nb+" changes ", 2);
+		doNextPlayer();
 	}
- gplayer=3-gplayer;
- outprintappend("Round "+(round++) +". Got "+nb+" changes ", 2);
- doNextPlayer();
 }
 
 function doNextPlayer(){
- //outprintappend("Player "+gplayer+" please");
- outprintappend(i18n[lang].playerNames[gplayer]+ " please");
- //if((gplayer == 2)  && computer){
- if(app.params['player'+gplayer]=='Computer'){
-	//outprintappend("before paycomputer"+i+j+player);
-	playComputer(gplayer);
-	//outprintappend("after paycomputer"+i+j+player);
- }
-//REMOVE!
-//playComputer();
+ 	outprintappend(i18n[lang].playerNames[gplayer]+ " please");
+	if(app.params['player'+gplayer]=='Computer'){
+		playComputer(gplayer);
+	}
 }
 
-}
+
 var delay=0;
 function doPlaySwitchUI(player,i,j,time){
 	//outprint("play"+player+i+j);
@@ -348,9 +349,18 @@ function stopGames(){
 	gameover=true;
 	outprint("The game is over. <br/> <b>Black:</b> "+score[1]+"<br/><b>White:</b> "+score[2]);
 	var bigmsg='';
-	if( score[1]>score[2]) bigmsg="You WIN";
-	else if( score[1]==score[2]) bigmsg="TIE";
-	else bigmsg="You LOSE";
+	var human=0;
+	if( score[1]==score[2]){
+		bigmsg="TIE";
+	}
+	else if (app.params.player1 == 'Human' && app.params.player2 != 'Human'){
+		if( score[1]>score[2]) bigmsg="You WIN";
+	}
+	else if (app.params.player2 == 'Human' && app.params.player1 != 'Human'){
+		if( score[2]>score[1]) bigmsg="You WIN";
+	} else if( score[1]>score[2]) bigmsg="Black WIN";
+	else bigmsg="White WIN"
+	
 	document.getElementById('gameover').innerHTML=bigmsg;
 	document.getElementById('gameover').style.display="table-cell";
 	
@@ -392,6 +402,7 @@ function playComputer(gplayer){
 function restart(){
 	if(!app.game.started){
 		doNextPlayer();
+		return;
 	}
 
 	if(gameover || confirm("Current game wil be lost, are you sure?") ){
@@ -439,6 +450,8 @@ function param(){
 function cloze(save){
 	if(save){
 		pullForm(app.params);
+		localStorage.player1=app.params.player1;
+		localStorage.player2=app.params.player2;
 	}
 	window0.remove();
 }
@@ -446,6 +459,7 @@ function cloze(save){
 function pageLoaded(){
 	doHash();
 	app.addLink();
+	outprintappend("press Start");
 }
 
 function doHash(){
