@@ -17,6 +17,7 @@ var app={
 		started:false,
 		over: false
 	}
+	
 };
 
 
@@ -267,6 +268,19 @@ function restart(){
 
 var window0;
 
+b={
+	links: {},
+	button: function(value,onclick){
+		b.links[value]=onclick;
+		return '<input type="button" class="btn" name="'+value+'" value="'+value+'"/>';
+	},
+	addLink: function(){
+		for(link in b.links){
+			console.log(link);
+			document.getElementsByName(link)[0].addEventListener("click", b.links[link]);
+		}
+	}
+};
 function sfield(field, input){
 return '<div class="centered"><label>'+field+': </label>'+
 		'<select name="'+input+'"> <option>Human</option><option>Computer</option></select></div>';
@@ -296,9 +310,10 @@ function param(){
 	window0.innerHTML='<h1>Options</h1><br>'+sfield('Player 1 (Black)','player1')+'<br>'+
 		sfield('Player2 (White)','player2')+
 		'<div class="btnbar">'+
-		'	<input type="button" class="btn" onclick="cloze()" value="Cancel"/>'+
-		'	<input type="button" class="btn" onclick="cloze(true)" value="ok"/>'+
+		b.button("Cancel",cloze)+
+		b.button("Ok",function(){cloze(true);})+
 		'</div>';
+	b.addLink();
 	pushForm(app.params);
 }
 
@@ -323,8 +338,9 @@ function doHash(){
 	}
 }
 app.addLink= function(){
-	document.getElementsByName("restart")[0].addEventListener("click", restart);
-	document.getElementsByName("options")[0].addEventListener("click", param);
+	b.links.restart=restart;
+	b.links.options=param;
+	b.addLink();
 }
 
 
