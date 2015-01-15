@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html><head><title>build-reversi</title>
+<!-- TODO 
+ store score 
+ click on options and css rule-->
+<!-- meta name="viewport" content="user-scalable = yes"-->
+<!--<meta name="viewport" content="width=480, initial-scale=0.7"> -->
+<!--<meta name="viewport" content="width=800">--> 
+<!-- <meta name="viewport" content="initial-scale=0.5"> -->
+
+<script src="app.css.js">
+</script>
+<script>
+/**
+ Old school type
+ */
+var JsCss=function(){ 
+	this.insertTag= false;
+	this.prettyPrint= true;
+
+
+/**
+ * Map<Map<<String>> elem: map of map of CSS strings
+ * syntax simplification: _ replaced by -
+ * number replaced by numberpx or #number
+ */
+this.js2css = function(js){
+	if (this.insertTag) {
+		monstyle=document.createElement('style');
+		document.head.appendChild(monstyle);
+	}
+	var allCss='';
+	var curly=this.prettyPrint?'\n}\n':'}';
+	
+	for (var k in js){
+	    css = k + '{';
+		
+		for (var l in js[k]){
+			var prop=l.replace('_','-'); 
+			var value=js[k][l];
+			if (typeof value === 'number' ){
+				if(l.indexOf('color')>=0){
+					value ="#"+value.toString(16);
+				}else{
+					value +="px";
+				}
+			}
+			if (this.prettyPrint) css += '\n\t';
+			css += prop + ': ' + value +';';
+		}
+		css += curly;
+		if (this.insertTag) monstyle.sheet.insertRule(css,0);
+		//console.log(css);
+		allCss += css + '\n';
+	}
+	return allCss;
+}
+
+}
+</script>
+</head><body>
+<div id="text"></div>
+<script>
+
+var jsCss= new JsCss();
+
+var text = jsCss.js2css(css);
+console.log(text);
+debugger;
+document.getElementById('text').innerHTML= '<h1>Css</h1><pre>'+text+'</pre>';
+</script>
+</body></html>
