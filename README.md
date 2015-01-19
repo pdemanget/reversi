@@ -14,4 +14,13 @@ The player with black pieces begins.
 You can play against the computer, or versus a Human opponent. To configure, go in "options" screen.
 By default you play the black pieces, and the computer the whites. 
 
-Please feel free to send any suggestion to the creator of the game pdemanget_at_gmail.com
+Please feel free to send any suggestion to the developper of the game pdemanget_at_gmail.com
+
+
+developpement
+=============
+
+This is a packaged appication, there are 2 manifest:
+ manifest.webpp: to be on the root of the zip file
+ build/manifest.webapp: to install the game from a local server.
+ 

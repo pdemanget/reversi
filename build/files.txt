@@ -1,0 +1,5 @@
+app.js
+app.css
+index.html
+manifest.webapp
+img/*

@@ -1,0 +1,6 @@
+
+v0.0.2: game with options and marketplace rule
+includes:
+ - refactore in multiple files
+
+

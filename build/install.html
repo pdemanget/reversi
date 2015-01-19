@@ -8,8 +8,12 @@
 		document.write("this will install from :"+url);
 	  // This URL must be a full url.
       var manifestUrl = url+'/manifest.webapp';
-      var req = navigator.mozApps.install(manifestUrl);
-      req.onsuccess = function() {
+      //var req = navigator.mozApps.install(manifestUrl);
+      var req = navigator.mozApps.install("http://localhost:8081/manifest.webapp");
+	  //in manifest
+      // "launch_path": "/index.html",
+ 
+	  req.onsuccess = function() {
         alert(this.result.origin);
       };
       req.onerror = function() {

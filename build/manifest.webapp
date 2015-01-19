@@ -1,0 +1,9 @@
+{
+    "name": "Reversi",
+    "package_path" : "http://localhost:8001/build/reversi.zip",
+    "version": "0.1",
+    "developer": {
+        "name": "Philippe Demanget",
+        "url": "http://github.com/pdemanget"
+    }
+}
