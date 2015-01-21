@@ -5,14 +5,17 @@
       
 	  var url = window.location.href;
 	  url=url.substring(0,url.lastIndexOf('/'));
-		document.write("this will install from :"+url);
+		document.write("Install package :"+url);
 	  // This URL must be a full url.
       var manifestUrl = url+'/manifest.webapp';
       //var req = navigator.mozApps.install(manifestUrl);
-      var req = navigator.mozApps.install("http://localhost:8001/build/manifest.webapp");
+	  try{
+      var req = navigator.mozApps.installPackage("http://localhost:8081/build/manifest.webapp");
 	  //in manifest
       // "launch_path": "/index.html",
- 
+		}catch(e){
+			alert(e);
+		}
 	  req.onsuccess = function() {
         alert(this.result.origin);
       };

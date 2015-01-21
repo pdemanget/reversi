@@ -7,7 +7,7 @@ created: 2015-01-15
 ====================================================
 */
 
-
+//TODO persist bug + lost bug
 var app={
 	params:{
 		player1:localStorage.player1|| 'Human', 
@@ -16,6 +16,16 @@ var app={
 	game:{
 		started:false,
 		over: false
+	},
+	scores:{
+		Human:{
+			win:localStorage.scoresWinHuman|| 0,
+			lost:localStorage.scoresLostHuman||0
+		},
+		Computer:{
+			win:localStorage.scoresWinComputer||0,
+			lost:localStorage.scoresLostComputer||0
+		}
 	}
 	
 };
@@ -142,8 +152,9 @@ doPlaySwitchUI(player,i,j,time);
 }
 
 var lastPlayDelay=1;
-var speedDelay=100;
-var computerDelay=500;
+//TODO reset to 100, 500
+var speedDelay=10;
+var computerDelay=50;
 /*
 algorithm 
 loop in 8 direction till border, find other color, till ours, if none, return unplayable code ie 0.
@@ -195,6 +206,21 @@ function stopGames(){
 	for(j=0;j<8;j++){
 		score[oth[i][j]]++;
 	}
+	app.params.name1=app.params.name1||app.params.player1;
+	app.params.name2=app.params.name2||app.params.player2;
+	//scores[app.params.name1]=score[1];
+	//scores[app.params.name2]=score[2];
+	if( score[1]>score[2]){
+		app.scores[app.params.name1].win++;
+		app.scores[app.params.name2].lost++;
+	}else{
+		app.scores[app.params.name1].lost++;
+		app.scores[app.params.name2].win++;	
+	}
+	localStorage['scoresWin'+app.params.name1] = app.scores[app.params.name1].win;
+	localStorage['scoresWin'+app.params.name2] = app.scores[app.params.name2].win;
+	localStorage['scoresLost'+app.params.name1] = app.scores[app.params.name1].lost;
+	localStorage['scoresLost'+app.params.name2] = app.scores[app.params.name2].lost;
 	gameover=true;
 	outprint("The game is over. <br/> <b>Black:</b> "+score[1]+"<br/><b>White:</b> "+score[2]);
 	var bigmsg='';
@@ -285,6 +311,12 @@ function sfield(field, input){
 return '<div class="centered"><label>'+field+': </label>'+
 		'<select name="'+input+'"> <option>Human</option><option>Computer</option></select></div>';
 }
+
+function label(title, value){
+return '<div class="centered"><label>'+title+': </label>'+
+		'<span>'+value+' </span></div>';
+}
+
 function pushForm(o){
 	for(var key in o){
 		var elts = document.getElementsByName(key);
@@ -307,12 +339,15 @@ function param(){
 	div.setAttribute("class","window");
 	window0=document.body.appendChild(div);
 	//window0.innerHTML='<div style="position:absolute;top:0;bottom:0;left:0;right:0;" ><h1>test</h1></div>';
-	window0.innerHTML='<h1>Options</h1><br>'+sfield('Player 1 (Black)','player1')+'<br>'+
-		sfield('Player2 (White)','player2')+
+	var html ='<h1>Options</h1><br>'+sfield('Player 1 (Black)','player1')+'<br>'+
+		sfield('Player2 (White)','player2')+'<br>'+
+		label('Human',app.scores.Human.win+' win '+app.scores.Human.lost+' lost')+'<br>'+
+		label('Computer',app.scores.Computer.win+' win '+' '+app.scores.Computer.lost+' lost')+
 		'<div class="btnbar">'+
 		b.button("Cancel",cloze)+
 		b.button("Ok",function(){cloze(true);})+
 		'</div>';
+	window0.innerHTML=html;
 	b.addLink();
 	pushForm(app.params);
 }
