@@ -3,6 +3,11 @@
     <p>Packaged app installation page</p>
     <script>
 function install(){
+	if (! navigator.mozApps ){
+		alert("You must be in Firefox Navigator to install a Firefox Application");
+		return;
+	}
+
 	var url = window.location.href;
 	url=url.substring(0,url.lastIndexOf('/'));
 	// This URL must be a full url.

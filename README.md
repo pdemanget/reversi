@@ -20,7 +20,7 @@ Please feel free to send any suggestion to the developper of the game pdemanget_
 developpement
 =============
 
-This is a packaged appication, there are 2 manifest:
+This is a packaged application, there are 2 manifest:
  manifest.webpp: to be on the root of the zip file
  build/manifest.webapp: to install the game from a local server.
  

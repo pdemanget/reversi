@@ -1,0 +1,22 @@
+<html>
+  <body>
+    <p>Packaged app installation page</p>
+    <script>
+function install(){
+	console.log("install begin");
+	try{
+      var req = navigator.mozApps.installPackage("http://localhost:8001/build/manifest.webapp");
+	  req.onsuccess = function() {
+        alert("SUCCESS:"+this.result.origin);
+      };
+      req.onerror = function() {
+        alert("ERREUR:"+this.error.name);
+      };
+	}catch(e){
+		alert(e);
+	}
+}
+    </script>
+	<button onclick="install()">install package</button>
+  </body>
+</html>
