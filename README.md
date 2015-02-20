@@ -23,4 +23,8 @@ developpement
 This is a packaged application, there are 2 manifest:
  manifest.webpp: to be on the root of the zip file
  build/manifest.webapp: to install the game from a local server.
- 
+
+design
+======
+The design is frameworkless. need to adapt to different resolutions:
+phone: 480x800?

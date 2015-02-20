@@ -8,7 +8,7 @@
  - 
  */
 var Board=function Board(){
-var debug=2;//0 default none, 3 trace
+var debug=3;//0 default none, 3 trace
 var gplayer=1;
 var oth;//the board
 var gameover=false;
@@ -21,7 +21,7 @@ var i18n={
 	}
 }
 this.model=false;//true to update model only
-
+this.depth=0;//simulation depth, 0 mean real.
 //==technical
 //generation html
 this.doTable = function doTable(){
@@ -41,8 +41,12 @@ this.doCell=function(cell,i,j){
 	doTestAndPlay(gplayer,i,j);
 }
 
+/**
+ * play ui
+ **/
 function doTestAndPlay(player,i,j){
 	app.game.started=true;
+	this.model=false;
 	if(gameover) return;
 	//outprintappend("click"+i+j+player+gplayer);
 	var nb = doPlay(player,i,j,false);
@@ -71,7 +75,17 @@ function doNextPlayer(){
 	outprintappend(i18n[lang].playerNames[gplayer]+ " please");
 	if(app.params['player'+gplayer]=='Computer'){
 		//playComputer(gplayer);
-		computer4.playComputerModel(gplayer,round);
+//		this.model=true;
+
+		//var turn = computer4.playComputerModel(gplayer,round);
+		var turn = playComputer(gplayer);
+		
+		if (turn.length) {
+			doTestAndPlay(gplayer,turn[0],turn[1]);
+		}else{
+			setOpponentPlayer();
+			doNextPlayer();
+		}
 	}
 }
 
@@ -80,6 +94,11 @@ var delay=0;
 function doPlaySwitchUI(player,i,j,time){
 	outprint("playUI"+player+i+j);
 	//delay= delay?delay+speedDelay:(speedDelay);
+	if (!speedDelay){
+		document.getElementById("cell"+i+"_"+j).className="player"+player;
+		return;
+	}
+	
 	delay= delay?delay+speedDelay:(speedDelay);
 	setTimeout(function(){
 		document.getElementById("cell"+i+"_"+j).className="player"+player;
@@ -92,22 +111,23 @@ function outprint(msg){
 	outprintappend(msg,0);
 }
 var outprintappend=this.outprintappend= function outprintappend(msg,level){
+	level=level || 0;
 	if(level && level>debug) return;
 	console.log(msg);
 	var message=document.getElementById('message');
     if(message){
-		if (debug)
-			msg += '<br/>' + message.innerHTML;
-		else
+		if (level<1)
 			setTimeout(function(){
-				document.getElementById('message').innerHTML =msg;
+				message.innerHTML =msg;
 			},delay);
+		/* message.innerHTML = msg += '<br/>' + message.innerHTML;
+		else */
 	}
 }
 //==game API
 
-function initGame(){
-oth = new Array(8);
+var initGame=function initGame(){
+this.board=oth = new Array(8);
 var i,j;
 for(i=0;i<8;i++){
 	oth[i]=new Array(8);
@@ -119,7 +139,7 @@ doPlayAdd(1,3,3);
 doPlayAdd(1,4,4);
 doPlayAdd(2,3,4);
 doPlayAdd(2,4,3);
-}
+}.bind(this);
 
 function doPlaySwitch(player,i,j,i0,j0,nb){
 var k;
@@ -136,8 +156,12 @@ if(!this.model) doPlaySwitchUI(player,i,j,time);
 
 var lastPlayDelay=1;
 //TODO reset to 100, 500
-var speedDelay=10;
+/*var speedDelay=10;
 var computerDelay=50;
+* */
+var speedDelay=0;
+var computerDelay=0;
+
 /*
 algorithm 
 loop in 8 direction till border, find other color, till ours, if none, return unplayable code ie 0.
@@ -150,9 +174,13 @@ for(j0=-1;j0<=1;j0++)
 	rslt+=doPlayDir(player,i,j,i0,j0,simu);
 if(simu) return rslt;
 outprintappend("doPlay (try player"+player+" )"+i+","+j+" "+simu,2);
-debugger;
+
 if(rslt>0){
  doPlayAdd(player,i,j,lastPlayDelay);
+ if(!this.model) {
+	//debugger; a real play
+	outprintappend("doPlayAdd (change piece color) "+i+","+j+" player"+player+" ",3);
+ }
 // lastPlayDelay=delay;
 }
 return rslt;
@@ -255,17 +283,14 @@ function playComputer(gplayer){
 		if(myarray[i][j]>=k){
 			nb = doPlay(gplayer,i,j,true);//simu
 			if(nb>0){
-				nb = doTestAndPlay(gplayer,i,j,true);
-				if(nb>0){
-				//bug see why it happens alert('KO');
-				}
-				return;
+				return [i,j];
+				
 			}
 		}
 	}
 	
-	setOpponentPlayer();
-	doNextPlayer();
+	//setOpponentPlayer();
+	//doNextPlayer();
 };
 
 this.restart = function restart(){
@@ -278,11 +303,13 @@ this.restart = function restart(){
 		window.location.reload();	
 	}
 };
-this.setBoard=function(board){oth=board;};
+this.setBoard=function(board){this.board=oth=board;};
 this.setGplayer=function(p){gplayer=p;};
+this.getGplayer=function(p){return gplayer};
+
 this.setRound=function(p){round=p;};
 this.getBoard=function(){return oth};
-this.gplayer=gplayer;
+//this.gplayer=gplayer;
 this.clone=function(){
 	var res = new Board();
 	
@@ -299,6 +326,8 @@ this.clone=function(){
 	}
 	res.setBoard(oth2);
 	res.parent=this;
+	res.depth=this.depth+1;
+	//debugger; check clone
 	return res;
 };
 //no indentation for that level: just a class wrapper
