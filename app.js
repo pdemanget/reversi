@@ -41,6 +41,9 @@ var app={
 
 
 function pageLoaded(){
+	//console.log(screen.width);
+	//window.innerWidth
+	//document.body.style='transform:scale(1.5)';
 	doHash();
 	app.addLink();
 	board.outprintappend("press Start");

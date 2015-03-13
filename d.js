@@ -29,7 +29,7 @@ this.extend(this,{
 	},
 	sfield: function(field, input){
 		return '<div class="centered"><label>'+field+': </label>'+
-				'<select name="'+input+'"> <option>Human</option><option>Computer</option></select></div>';
+				'<select name="'+input+'"> <option>Human</option><option>Computer</option><option>Computer2</option></select></div>';
 	},
 	label: function(title, value){
 		return '<div class="centered"><label>'+title+': </label>'+

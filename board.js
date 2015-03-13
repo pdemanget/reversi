@@ -8,6 +8,7 @@
  - 
  */
 var Board=function Board(){
+var me=this;//context lost in private functions.
 var debug=3;//0 default none, 3 trace
 var gplayer=1;
 var oth;//the board
@@ -22,6 +23,7 @@ var i18n={
 }
 this.model=false;//true to update model only
 this.depth=0;//simulation depth, 0 mean real.
+this.turns=[];
 //==technical
 //generation html
 this.doTable = function doTable(){
@@ -73,12 +75,12 @@ function setOpponentPlayer(){
 function doNextPlayer(){
  	if(gameover) return;
 	outprintappend(i18n[lang].playerNames[gplayer]+ " please");
-	if(app.params['player'+gplayer]=='Computer'){
-		//playComputer(gplayer);
-//		this.model=true;
-
-		//var turn = computer4.playComputerModel(gplayer,round);
-		var turn = playComputer(gplayer);
+	if(app.params['player'+gplayer]=='Computer' || app.params['player'+gplayer]=='Computer2'){
+		var turn;
+		if(app.params['player'+gplayer]=='Computer')
+			turn = playComputer(gplayer);
+		else
+			turn = computer4.playComputerModel(gplayer,round);
 		
 		if (turn.length) {
 			doTestAndPlay(gplayer,turn[0],turn[1]);
@@ -179,7 +181,8 @@ if(rslt>0){
  doPlayAdd(player,i,j,lastPlayDelay);
  if(!this.model) {
 	//debugger; a real play
-	outprintappend("doPlayAdd (change piece color) "+i+","+j+" player"+player+" ",3);
+	outprintappend("doPlay for Real (change piece color) "+i+","+j+" player"+player+" ",3);
+	me.turns.push([i,j,player]);
  }
 // lastPlayDelay=delay;
 }
@@ -206,7 +209,7 @@ if(inLimit(i) && inLimit(j)&& oth[i][j]==player){
 return 0;
 }
 
-function isPlayable(player){
+var isPlayable = this.isPlayable = function isPlayable(player){
 	for(i=0;i<8;i++)
 	for(j=0;j<8;j++){
 		if(doPlay(player,i,j,true)>0) return true;
@@ -223,8 +226,8 @@ function stopGames(){
 	}
 	app.params.name1=app.params.name1||app.params.player1;
 	app.params.name2=app.params.name2||app.params.player2;
-	//scores[app.params.name1]=score[1];
-	//scores[app.params.name2]=score[2];
+	app.scores[app.params.name1]=app.scores[app.params.name1]||{};
+	app.scores[app.params.name2]=app.scores[app.params.name2]||{};
 	if( score[1]>score[2]){
 		app.scores[app.params.name1].win++;
 		app.scores[app.params.name2].lost++;

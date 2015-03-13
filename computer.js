@@ -52,6 +52,12 @@ var cellScore=this.cellScore=[
 [m,m,m,m,m,m,m,m],
 [m,m,m,m,m,m,m,m]
 ];
+this.init=function(){
+	for(i=0;i<8;i++)
+		for(j=0;j<8;j++)
+			this.cellScore[i][j]=m;
+}	
+
 maxIndex = function(arr){
 	var mx=m;
 	var res=[];
@@ -108,6 +114,8 @@ this.scoreBoard = function(board,depth){
 	outprintappend("play computer "+gplayer,2);*/
 	//just play in priority the best notated cells.
 	//optim inutile sur l'ordre des cell for(k=8;k>=-1;k--)
+	this.init();
+//	debugger;// voir le cellScore initial
 	for(i=0;i<8;i++)
 	for(j=0;j<8;j++){
 	//	if(cellBonus[i][j]>=k){
@@ -115,17 +123,33 @@ this.scoreBoard = function(board,depth){
 			this.scoreCell(board,i,j,depth);
 	//	}
 	}
-	//debugger;//voir le résultat du board
-}
+	//debugger;//voir le résultat du cellScore
+	this.showCellScore();
+};
+
+this.showCellScore = function(){
+	var result="";
+	for(i=0;i<8;i++){
+		for(j=0;j<8;j++){
+			result += this.cellScore[i][j]+", ";
+		}
+		result+="\n";
+	}
+	console.log(result);
+};
 
 this.scoreCell = function(board,i,j,depth){
+	
 	board.outprintappend("cell player"+this.gplayer+" depth "+depth,3);
-	var myTurn= board.gplayer==this.gplayer;
+	var myTurn= board.getGplayer()==this.gplayer;
 	var nb=	board.doPlay(board.getGplayer(),i,j,true);
 	if(nb==0) return;
 	if(depth==0){
 		return cellScore[i][j]=myTurn?cellBonus[i][j]:-cellBonus[i][j];
 	}else{
+		if(! board.isPlayable(board.getGplayer())) {
+			return cellScore[i][j]=myTurn?cellBonus[i][j]:-cellBonus[i][j];
+		}
 		//cloner,jouer, calculer les score du clone
 		var board2=board.clone();
 		board2.doPlay(this.gplayer,i,j,false);
@@ -138,4 +162,4 @@ this.scoreCell = function(board,i,j,depth){
 //no indentation for that level: just a class wrapper
 return this;
 };
-var computer4 = new Computer(board,0);
+var computer4 = new Computer(board,3);

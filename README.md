@@ -28,3 +28,11 @@ design
 ======
 The design is frameworkless. need to adapt to different resolutions:
 phone: 480x800?
+
+Wish list
+=========
+[ ] undo last operation
+[ ] Replay all game
+
+Todo ending problem when many turns
+
