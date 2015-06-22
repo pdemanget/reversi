@@ -8,7 +8,7 @@
  - 
  */
 var Board=function Board(){
-var debug=3;//0 default none, 3 trace
+var debug=0;//0 default none, 3 trace
 var gplayer=1;
 var oth;//the board
 var gameover=false;
@@ -92,7 +92,7 @@ function doNextPlayer(){
 
 var delay=0;
 function doPlaySwitchUI(player,i,j,time){
-	outprint("playUI"+player+i+j);
+	outprintappend("playUI"+player+i+j,2);
 	//delay= delay?delay+speedDelay:(speedDelay);
 	if (!speedDelay){
 		document.getElementById("cell"+i+"_"+j).className="player"+player;
@@ -156,12 +156,12 @@ if(!this.model) doPlaySwitchUI(player,i,j,time);
 
 var lastPlayDelay=1;
 //TODO reset to 100, 500
-/*var speedDelay=10;
-var computerDelay=50;
-* */
+var speedDelay=100;
+var computerDelay=500;
+/*
 var speedDelay=0;
 var computerDelay=0;
-
+*/
 /*
 algorithm 
 loop in 8 direction till border, find other color, till ours, if none, return unplayable code ie 0.

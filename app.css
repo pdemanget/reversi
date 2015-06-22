@@ -1,7 +1,37 @@
-/** generated with jscss */
+@media screen and ( max-width: 400px ) and ( max-width: 400px ) {
+td{
+	width: 14px;
+	height: 14px;
+}
+
+img{
+	width: 10px;
+	height: 10px;
+}
+
+.player1{
+	width: 10px;
+	height: 10px;
+	border-radius: 10px;
+}
+
+.player2{
+	width: 10px;
+	height: 10px;
+	border-radius: 10px;
+}
+
+#message{
+	width: 136px;
+}
+
+
+}
+
+@media screen and ( max-width: 800px ) and ( max-width: 800px ) {
 html, body{
-	/*width: 100%;
-	height: 100%;*/
+	width: 100%;
+	height: 100%;
 	margin: 0px;
 	font: bold 20px arial;
 }
@@ -9,8 +39,10 @@ html, body{
 h1{
 	background: black;
 	color: #ffffff;
-	text-align: center;
 	margin: 0px;
+	z-index: 2;
+	font-size: 34px;
+	padding-right: 4px;
 }
 
 table{
@@ -41,7 +73,7 @@ img{
 	width: 25px;
 	height: 25px;
 	border: 2px solid black;
-	border-radius: 22px;
+	border-radius: 25px;
 	background-color: black;
 }
 
@@ -49,7 +81,7 @@ img{
 	width: 25px;
 	height: 25px;
 	border: 2px solid black;
-	border-radius: 22px;
+	border-radius: 25px;
 	background-color: white;
 }
 
@@ -85,7 +117,6 @@ img{
 	text-align: center;
 	background-color: black;
 	position: fixed;
-	left: 0px;
 	right: 0px;
 	bottom: 0px;
 }
@@ -98,6 +129,7 @@ img{
 	margin: 5px;
 	font: bold 25px arial;
 	text-transform: uppercase;
+	display: auto;
 }
 
 .window{
@@ -124,3 +156,225 @@ select{
 	font: bold 20px arial;
 	width: 120px;
 }
+
+
+}
+
+@media screen and ( min-width: 800px ) and ( min-width: 800px ) {
+td{
+	width: 54px;
+	height: 54px;
+}
+
+img{
+	width: 50px;
+	height: 50px;
+}
+
+.player1{
+	width: 50px;
+	height: 50px;
+	border-radius: 50px;
+}
+
+.player2{
+	width: 50px;
+	height: 50px;
+	border-radius: 50px;
+}
+
+#message{
+	width: 456px;
+}
+
+
+}
+
+@media screen and ( min-width: 1600px ) and ( min-width: 1600x ) {
+td{
+	width: 104px;
+	height: 104px;
+}
+
+img{
+	width: 100px;
+	height: 100px;
+}
+
+.player1{
+	width: 100px;
+	height: 100px;
+	border-radius: 100px;
+}
+
+.player2{
+	width: 100px;
+	height: 100px;
+	border-radius: 100px;
+}
+
+#message{
+	width: 856px;
+}
+
+
+}
+
+@media screen and (orientation:landscape){
+h1{
+	text-align: right;
+	right: 0px;
+	position: absolute;
+	transition: none;
+}
+
+.btnbar{
+	left: auto;
+	top: 0px;
+	padding-top: 50px;
+	transition: none;
+}
+
+.btn{
+	display: block;
+}
+
+
+}
+
+@media screen and (orientation:portrait){
+h1{
+	text-align: center;
+	right: auto;
+	position: relative;
+	transition: none;
+}
+
+.btnbar{
+	left: 0px;
+	top: auto;
+	padding-top: 5px;
+	transition: none;
+}
+
+.btn{
+	display: auto;
+}
+
+
+}
+
+html, body{
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	font: bold 20px arial;
+}
+
+h1{
+	background: black;
+	color: #ffffff;
+	margin: 0px;
+	z-index: 2;
+	font-size: 34px;
+	padding-right: 4px;
+}
+
+table{
+	margin: 5px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+	border-collapse: collapse;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+td{
+	border-width: 1px;
+	border-style: solid;
+	border-color: black;
+	background-color: #22dd22;
+}
+
+.player1{
+	border: 2px solid black;
+	background-color: black;
+}
+
+.player2{
+	border: 2px solid black;
+	background-color: white;
+}
+
+#message{
+	border: 1px solid black;
+	text-align: center;
+	height: 75px;
+	color: #5f9ea0;
+	font: bold 20px arial;
+	overflow: auto;
+	margin-top: 5px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#gameover{
+	position: absolute;
+	top: 125px;
+	left: 0px;
+	right: 0px;
+	margin: 0 auto;
+	padding: 10px;
+	max-width: 130px;
+	background-color: rgba(127,255,127,0.75);
+	color: #0;
+	text-align: center;
+	font: 900 30px arial,sans-serif;
+	display: none;
+}
+
+.btnbar{
+	text-align: center;
+	background-color: black;
+	position: fixed;
+	right: 0px;
+	bottom: 0px;
+}
+
+.btn{
+	text-align: center;
+	background-color: #5f5;
+	border: 2px solid #050;
+	border-radius: 7px;
+	margin: 5px;
+	font: bold 25px arial;
+	text-transform: uppercase;
+	display: auto;
+}
+
+.window{
+	position: fixed;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	background-color: #ffffff;
+}
+
+.centered{
+	margin-left: auto;
+	margin-right: auto;
+	width: 300px;
+}
+
+label{
+	width: 170px;
+	display: inline-block;
+}
+
+select{
+	font: bold 20px arial;
+	width: 120px;
+}
+
