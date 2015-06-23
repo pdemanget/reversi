@@ -1,7 +1,7 @@
 {
     "name": "Reversi",
-    "package_path" : "http://localhost:8001/build/reversi.zip",
-    "version": "0.1.0",
+    "package_path" : "http://localhost:8001/build/reversi101.zip",
+    "version": "1.0.1",
     "developer": {
         "name": "Philippe Demanget",
         "url": "http://localhost:8001/"

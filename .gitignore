@@ -1,1 +1,5 @@
-reversi.zip
+*.zip
+build/rush
+build/marketplace
+result.json
+tmp

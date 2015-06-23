@@ -1,5 +1,11 @@
 app.js
 app.css
+board.js
+computer.js
+d.js
 index.html
 manifest.webapp
-img/*
+option.js
+img/icon60.png
+img/icon128.png
+img/icon256.png
