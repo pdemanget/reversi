@@ -8,6 +8,9 @@
  - 
  */
 var Board=function Board(){
+var speedDelay=100;
+var computerDelay=500;
+
 var debug=0;//0 default none, 3 trace
 var gplayer=1;
 var oth;//the board
@@ -156,8 +159,6 @@ if(!this.model) doPlaySwitchUI(player,i,j,time);
 
 var lastPlayDelay=1;
 //TODO reset to 100, 500
-var speedDelay=100;
-var computerDelay=500;
 /*
 var speedDelay=0;
 var computerDelay=0;
@@ -237,7 +238,8 @@ function stopGames(){
 	localStorage['scoresLost'+app.params.name1] = app.scores[app.params.name1].lost;
 	localStorage['scoresLost'+app.params.name2] = app.scores[app.params.name2].lost;
 	gameover=true;
-	outprint("The game is over. <br/> <b>Black:</b> "+score[1]+"<br/><b>White:</b> "+score[2]);
+	//outprint("The game is over. <br/> <b>Black:</b> "+score[1]+"<br/><b>White:</b> "+score[2]);
+	outprint("Black:</b> "+score[1]+" - <b>White:</b> "+score[2]);
 	var bigmsg='';
 	var human=0;
 	if( score[1]==score[2]){

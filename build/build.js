@@ -1,4 +1,4 @@
- var fs = require('fs');
+var fs = require('fs');
 var djs = require('../d.js');
           require('./app.css.js');
 

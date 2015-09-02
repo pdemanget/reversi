@@ -4,10 +4,14 @@ var baseSize=25;
 var lgreen=0x5F5;
 var landscape=false;
 var tr=false;
-
+/**
+ *
+ * résolutions test 480x300 en mode landscape, baseSize=25 
+ * 
+ **/
 
 var landscapeMacro=function(landscape){
-	return  {	
+	var res = {	
 		h1:{
 			 text_align: landscape?"right":"center",
 			 //pour paysage
@@ -20,14 +24,26 @@ var landscapeMacro=function(landscape){
 		".btnbar":{
 			left: landscape?"auto":0,
 			top: landscape?0:"auto",
-			padding_top: landscape?50:5,
+			padding_top: landscape?100:5,
 			transition: tr?"all 2s":"none"
 		},
 		".btn": {
 			display: landscape?"block":"auto",
+			width:landscape?"94%":"auto"
 			//transition: "all 2s"
-		}
+		},
+		".centerGame": {
+			margin_left:landscape?"10px":"auto", 
+			margin_right:"auto"
+		},
+		".centered": {
+			margin_left: "auto",
+			margin_right: "auto",
+			padding_right:landscape?"10px":"inherited"
+		},
 	};
+	//console.log (res);
+	return res;
 };
 
 
@@ -56,13 +72,29 @@ function test1() {
 test1();
 */
 var cssMacro = function(baseSize) {
-	return {
+	var res = {
 	"html, body": {
 	 width: "100%",
 	 height: "100%",
 	 margin: 0,
-	 font: "bold 20px arial"
+	 font_weigth: "bold",
+	 font_family: "arial",
+	 font_size: 5+baseSize/2
 	},
+	
+	/*
+	".test10":{
+		display:baseSize==10?"block":"none"
+	},
+	".test25":{
+		display:baseSize==25?"block":"none"
+	},
+	".test50":{
+		display:baseSize==50?"block":"none"
+	},
+	".test100":{
+		display:baseSize==100?"block":"none"
+	},*/
 	/*
 	body:{
 		transform: "scale(2)"
@@ -79,7 +111,7 @@ var cssMacro = function(baseSize) {
 //	 float: landscape?"right":"none",
 //	 position: landscape?"fixed":"relative",
 	 z_index: "2",
-	 font_size: 34,
+	 font_size: 5+baseSize*1.1,
 	 padding_right: 4
 	},
 	table: {
@@ -88,8 +120,8 @@ var cssMacro = function(baseSize) {
 	 border_style:"solid",
 	 border_color:"black",
 	 border_collapse:"collapse",
-	 margin_left:"auto", 
-     margin_right:"auto"
+//	 margin_left:"auto", 
+//   margin_right:"auto"
 	},
 
 	td: { 
@@ -122,21 +154,22 @@ var cssMacro = function(baseSize) {
 	 border:"1px solid black",
 	 text_align:"center",
 	 width: 8*(baseSize+7),
-	 height: 75,
+	 height: 1*baseSize,//75 (was 2x baseSize?
 	 color: 0x5F9EA0,
-	 font: debug?"200 10px monospace":"bold 20px arial",
+	 //font: debug?"200 10px monospace":"bold 20px arial",
+	 font_size:debug?10:baseSize*0.8,
 	 overflow:"auto",
 	 margin_top: 5,
-	 margin_left: "auto",
-     margin_right: "auto"
+//	 margin_left: "auto",
+//   margin_right: "auto"
 	},
 	"#gameover": {
 	 //border:"1px solid black",
-	 position: "absolute",
-	 top: 125,
-	 left: 0,
-	 right: 0,
-	 margin: "0 auto",
+	 position: "fixed",
+	 top: baseSize*4,//125 was *5
+	 left: baseSize*3,//0 was *4
+	 //right: 0,
+	 // margin: "0 auto",
      padding: 10,
 	 max_width: 130,
 	 background_color: "rgba(127,255,127,0.75)",
@@ -165,8 +198,8 @@ var cssMacro = function(baseSize) {
 		background_color: lgreen,
 		border: "2px solid #050",
 		border_radius:7,
-		margin: 5,
-		font: "bold 25px arial",
+		margin: baseSize/4,
+		font_size:baseSize,
 		text_transform: "uppercase",
 		display: landscape?"block":"auto",
 	},
@@ -178,20 +211,23 @@ var cssMacro = function(baseSize) {
 		right:0,
 		background_color:0xFFFFFF
 	},
-	".centered": {
-		margin_left: "auto",
-		margin_right: "auto",
-		width: 300
-	},
 	label: {
 		width: 170,
-		display: "inline-block"
+		display: "inline-block",
+		font_size: 7+baseSize/2 
 	},
 	select: {
-		font: "bold 20px arial",
-		width: 120
+		font_size: 5+baseSize/2,
+		width: baseSize*4
+	},
+	".centered": {
+		width: baseSize * 14
 	}
 };
+res[".test"+baseSize]={
+	background_color:0xFFFF00
+};
+return res;
 };
 
 //pour toutes les tailles, calculer les macros, faire le diff, faire la media pour la taille
@@ -200,7 +236,7 @@ var sizedMacro=function(baseSize){
 }
 /*
 The design is frameworkless. need to adapt to different resolutions:
-phone: 480x800?
+phone: 480x800? ,  480x290
 * on prend 400 comme base minimum en hauteur et largeur, le landscape s'adpate pour prendre le pire des 2
 *  puis on étend à 800, 1600 ça devrais suffire.
 * 
@@ -218,14 +254,15 @@ css1600=diff(css1600, cssCommun);
 var css200=diff(cssMacro(10),cssCommun);
 
 var css = {
-	"@media screen and ( max-width: 400px ) and ( max-width: 400px ) ":css200,
+	"@media screen and ( max-width: 400px ) , screen and ( max-height: 400px ) ":css200,
 	
-	"@media screen and ( max-width: 800px ) and ( max-width: 800px ) ":css400,
-	"@media screen and ( min-width: 800px ) and ( min-width: 800px ) ":css800,
-	"@media screen and ( min-width: 1600px ) and ( min-width: 1600x ) ":css1600,
+	"@media screen and ( min-width: 401px ) and ( max-width: 800px ) , screen and ( min-height: 401px ) and ( max-height: 800px ) ":css400,
+	"@media screen and ( min-width: 801px ) , screen and ( min-height: 801px ) ":css800,
+	"@media screen and ( min-width: 1601px ) , screen and ( min-height: 1601x ) ":css1600,
 	"@media screen and (orientation:landscape)": landscapeMacro(true),
 	"@media screen and (orientation:portrait)": landscapeMacro(false)
 }
+
 d.extend(css,cssCommun);
- 
+console.log(css); 
 if (GLOBAL) GLOBAL.css=css;
